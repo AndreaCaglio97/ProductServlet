@@ -1,61 +1,67 @@
 
 
 import java.io.IOException;
-import javax.servlet.Servlet;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class ProductServlet
- */
+
 @WebServlet("/ProductServlet")
-public class ProductServlet implements Servlet {
+public class ProductServlet extends HttpServlet {
 
-    /**
-     * Default constructor. 
-     */
-    public ProductServlet() {
-        // TODO Auto-generated constructor stub
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("Inside gogogogogogo");
+
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+		System.out.println("Inside doPost");
+		
+        // read form fields
+		String name = request.getParameter("name");
+		boolean isImported = Boolean.parseBoolean(request.getParameter("is_imported"));
+		double price = Double.parseDouble(request.getParameter("price"));
+		Category category = Category.valueOf(request.getParameter("category"));
+		Product product = new Product(name,isImported,price,category,1);
+		insertSingleProductToDB(product);
+ 
+        // do some processing here...
+         
+        // get response writer
+        PrintWriter writer = response.getWriter();
+         
+        // build HTML code
+        String htmlRespone = "<html>";
+        htmlRespone += "<h2>New Product:<br/>"; 
+        htmlRespone += "Name: " + name + "<br/>";
+        htmlRespone += "Imported: " + isImported + "<br/>";
+        htmlRespone += "Price: " + price + "<br/>";
+        htmlRespone += "category: " + category + "</h2>";    
+        htmlRespone += "</html>";
+         
+        // return response
+        writer.println(htmlRespone);
+         
     }
-
-	/**
-	 * @see Servlet#init(ServletConfig)
-	 */
-	public void init(ServletConfig config) throws ServletException {
-		// TODO Auto-generated method stub
+	
+	@Override
+	public void init(ServletConfig arg0) throws ServletException {
+		System.out.println("Inside Init");
 	}
-
-	/**
-	 * @see Servlet#destroy()
-	 */
-	public void destroy() {
-		// TODO Auto-generated method stub
-	}
-
-	/**
-	 * @see Servlet#getServletConfig()
-	 */
-	public ServletConfig getServletConfig() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * @see Servlet#getServletInfo()
-	 */
-	public String getServletInfo() {
-		// TODO Auto-generated method stub
-		return null; 
-	}
-
-	/**
-	 * @see Servlet#service(ServletRequest request, ServletResponse response)
-	 */
-	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
+	
 
 }
